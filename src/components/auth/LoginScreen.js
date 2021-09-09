@@ -38,7 +38,7 @@ export const LoginScreen = () => {
                         src="./assets/avatar.svg" 
                         alt="Imagen"
                     />
-                    <h2 className="my-8 font-bold text-3xl text-gray-700 text-center">Bienvenido</h2>
+                    <h2 className="my-8 font-bold text-3xl text-gray-700 text-center">Bienvenido Pruebas</h2>
                     <div className="lg:w-6/12 md:w-11/12 sm:w-5/6 w-4/6">
                         <i className="fa fa-user absolute text-blue-400 text-xl"></i>
                         <input 
