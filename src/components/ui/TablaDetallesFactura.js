@@ -40,7 +40,7 @@ const TablaDetallesFactura = ({ data, handleDelete }) => {
             <tbody>
                 {
                     data.map(dato => {
-                        return <FilaDetalleFactura dato={dato} handleDelete={handleDelete} key={dato._id} />
+                        return <FilaDetalleFactura dato={dato} handleDelete={handleDelete} key={dato.id} />
                     })
                 }
             </tbody>

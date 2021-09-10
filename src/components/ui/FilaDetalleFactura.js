@@ -35,7 +35,7 @@ const FilaDetalleFactura = ({ dato, handleDelete }) => {
     }
 
     const deleteFila = () => {
-        handleDelete(dato._id);
+        handleDelete(dato.id);
     }
 
     const handleChangeCantidad = async(e) => {
@@ -53,29 +53,27 @@ const FilaDetalleFactura = ({ dato, handleDelete }) => {
         dispatch(startActualizarDetalleFactura(
             {
                 ...dato,
-                valorUnitario: {
-                    $numberDecimal: e.target.value
-                }
+                valorUnitario: e.target.value
             }
         ))
     }
 
     useEffect(() => {
         const asignar = () => {
-            setValorUnitario(dato.valorUnitario.$numberDecimal);
+            setValorUnitario(dato.valorUnitario);
             setCantidad(dato.cantidad);
         }
         asignar();
-    }, [dato.valorUnitario.$numberDecimal, dato.cantidad])
+    }, [dato.valorUnitario, dato.cantidad])
     return ( 
         <tr
-            key={dato._id}
+            key={dato.id}
             className="hover:bg-blue-50 border-b w-full"
             onMouseEnter={handleEnter}
             onMouseLeave={handleOut}
         >
             
-            <td className='w-1/12 text-sm py-10'>{ dato.codigoPrincipal }</td>
+            <td className='w-1/12 text-sm py-10 px-2'>{ dato.codigoPrincipal }</td>
             <td className='w-3/12 text-sm text-gray-600 font-light'>{ dato.descripcion }</td>
             <td className='w-1/12 text-gray-600 font-light px-4'>
                 <input 

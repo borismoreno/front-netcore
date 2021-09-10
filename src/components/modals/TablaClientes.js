@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startObtenerClientes, startSeleccionarCliente } from '../../actions/clientes';
 import { Pagination } from '../ui/Pagination';
 
-export const TablaClientes = ({ presentarTabla }) => {
+export const TablaClientes = ({ presentarTabla, setIdentificacionBusqueda, setMostrarAgregar }) => {
     const dispatch = useDispatch();
     const [ idSeleccion, setIdSeleccion ] = useState('');
     const [ rowsPerPage, setRowsPerPage ] = useState(5);
@@ -29,9 +29,15 @@ export const TablaClientes = ({ presentarTabla }) => {
     }
 
     const handleSeleccionar = () => {
-        const clienteSeleccionado = clientes.find(item => item._id === idSeleccion);
+        const clienteSeleccionado = clientes.find(item => item.id === idSeleccion);
         dispatch(startSeleccionarCliente(clienteSeleccionado));
         presentarTabla(false);
+    }
+
+    const handleNuevoCliente = () => {
+        presentarTabla(false);
+        setIdentificacionBusqueda(identificacionBuscar);
+        setMostrarAgregar(true);
     }
 
     useEffect(() => {
@@ -94,6 +100,19 @@ export const TablaClientes = ({ presentarTabla }) => {
                 </div>
                 {/*body*/}
                 <div className="relative py-4 px-2 md:px-6 flex-auto overflow-x-scroll">
+                  {/* <div className="w-full flex justify-center pb-4">
+                  <button
+                        className='bg-blue-500 text-white w-12 h-12 p-0 text-lg rounded-full focus:outline-none'
+                    >
+                        <i className='fas fa-user-plus'></i>
+                    </button>
+                  </div> */}
+                  <div className='mb-1'>
+                    <button className='flex items-center text-gray-200 bg-blue-500 hover:bg-blue-700' onClick={handleNuevoCliente}>
+                      <i className='fas fa-plus p-3 focus:outline-none'></i>
+                      <p className='ml-2 pr-4'>Nuevo Cliente</p>
+                    </button>
+                  </div>
                 <table className="items-center w-full bg-transparent border-collapse ">
                     <thead>
                         <tr>
@@ -118,14 +137,14 @@ export const TablaClientes = ({ presentarTabla }) => {
                         {
                             currentRows.map(cliente => {
                                 return <tr
-                                    key={cliente._id}
+                                    key={cliente.id}
                                     className="border-b-2 hover:bg-blue-50"
                                     onChange={handleChangeInput}
                                 >
                                     <td
                                         className="border-t-0 px-6 max-w-sm align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-gray-500"
                                     >
-                                        <input type="radio" className="form-radio" name="idSeleccionado" value={cliente._id} />
+                                        <input type="radio" className="form-radio" name="idSeleccionado" value={cliente.id} />
                                     </td>
                                     <td className="border-t-0 px-6 max-w-sm align-middle border-l-0 border-r-0 text-xs p-4 text-gray-500">{ cliente.razonSocial }</td>
                                     <td className="border-t-0 px-6 max-w-sm align-middle border-l-0 border-r-0 text-xs p-4 text-gray-500">{ cliente.numeroIdentificacion }</td>

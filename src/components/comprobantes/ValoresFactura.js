@@ -5,13 +5,15 @@ import { startAgregarValoresFactura } from '../../actions/factura';
 export const ValoresFactura = () => {
     const dispatch = useDispatch();
     const { detallesFactura, valoresFactura } = useSelector(state => state.factura);
+    const { tiposProducto, tarifasIva } = useSelector(state => state.configuracion);
     const [totalDescuento] = useState(0.00);
     const { subtotalDoce, subtotalCero, subtotalNoIva, subtotalExento, subtotalSinImpuestos, totalIva, valorTotal } = valoresFactura;
 
     const obtenerSubtotalDoce = () => {
         return detallesFactura.reduce((prev, cur) => {
             let resultado = prev;
-            if (cur.tarifaIva.codigo === '2') {
+            const codigoTarifa = tarifasIva.find(tarifa => tarifa.id === cur.tarifaIva);
+            if (codigoTarifa.codigo === '2') {
                 resultado = prev + cur.subtotal;
             }
             return resultado;
@@ -21,7 +23,8 @@ export const ValoresFactura = () => {
     const obtenerSubtotalCero = () => {
         return detallesFactura.reduce((prev, cur) => {
             let resultado = prev;
-            if (cur.tarifaIva.codigo === '0') {
+            const codigoTarifa = tarifasIva.find(tarifa => tarifa.id === cur.tarifaIva);
+            if (codigoTarifa === '0') {
                 resultado = prev + cur.subtotal;
             }
             return resultado;
@@ -31,7 +34,8 @@ export const ValoresFactura = () => {
     const obtenerSubtotalNoIva = () => {
         return detallesFactura.reduce((prev, cur) => {
             let resultado = prev;
-            if (cur.tarifaIva.codigo === '6') {
+            const codigoTarifa = tarifasIva.find(tarifa => tarifa.id === cur.tarifaIva);
+            if (codigoTarifa === '6') {
                 resultado = prev + cur.subtotal;
             }
             return resultado;
@@ -41,7 +45,8 @@ export const ValoresFactura = () => {
     const obtenerSubtotalExentoIva = () => {
         return detallesFactura.reduce((prev, cur) => {
             let resultado = prev;
-            if (cur.tarifaIva.codigo === '7') {
+            const codigoTarifa = tarifasIva.find(tarifa => tarifa.id === cur.tarifaIva);
+            if (codigoTarifa === '7') {
                 resultado = prev + cur.subtotal;
             }
             return resultado;

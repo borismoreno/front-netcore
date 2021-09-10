@@ -21,9 +21,11 @@ export const types = {
     clientesSeleccionar: '[clientes] Seleccionar cliente',
     clientesLimpiarSeleccion: '[clientes] Limpiar selección',
     clientesGuardarCliente: '[clientes] Guardar cliente',
+    clientesLimpiarCerrarModal: '[clientes] Limpiar cerrar modal',
 
     productoObtener: '[producto] Obtener productos',
     productoActualizar: '[producto] Actualizar productos',
+    productoEliminarSeleccionado: '[producto] Eliminar seleccionado',
 
     configuracionTiposIdentificacion: '[configuracion] Buscar tipos de identificacion',
     configuracionDatosEmpresa: '[configuracion] Obtener datos empresa',

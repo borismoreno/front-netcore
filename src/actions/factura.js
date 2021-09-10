@@ -2,6 +2,7 @@ import { fetchConToken } from '../helpers/fetch';
 import { types } from '../types/types';
 import { startMostrarCargandoAlerta, startMostrarError, startOcultarCargandoAlerta } from './alerta';
 import { startObtenerDatosEmpresa } from './configuracion';
+import { startLimpiarProductoSeleccionado } from './producto';
 
 export const startAgregarDetalle = (detalle) => {
     return (dispatch) => {
@@ -17,6 +18,7 @@ const agregarDetalle = (detalle) => ({
 export const startLimpiarDatosFactura = () => {
     return (dispatch) => {
         dispatch(limpiarDatosFactura());
+        dispatch(startLimpiarProductoSeleccionado());
     }
 }
 
@@ -117,7 +119,6 @@ export const startEmitirFactura = (envioFactura) => {
             const respuesta = await fetchConToken('factura', envioFactura, 'POST');
             const body = await respuesta.json();
             if (body.ok) {
-                console.log(body);
                 dispatch(startOcultarCargandoAlerta());
                 // dispatch(startObtenerClaveAcceso(body.claveAcceso));
                 // dispatch(startObtenerDatosEmpresa(empresa._id));

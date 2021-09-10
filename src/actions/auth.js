@@ -19,7 +19,6 @@ export const startLogin = (email, password) => {
             if ( body.msg ) {
                 dispatch(startMostrarError(body.msg));
             } else {
-                console.log(body)
                 dispatch(startMostrarError(body.errores[0].msg));
             }
             return;
@@ -30,7 +29,6 @@ export const startLogin = (email, password) => {
 export const startChecking = () => {
     return async(dispatch) => {
         const respuesta = await fetchConToken('usuarios/renew');
-        console.log("renew");
         const body = await respuesta.json();
         if ( body.ok ) {
             localStorage.setItem('token', body.token);

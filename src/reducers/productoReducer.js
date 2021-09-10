@@ -18,6 +18,11 @@ export const productoReducer = (state = initialState, action) => {
                 productos: [...state.productos, action.payload],
                 productoNuevo: action.payload
             }
+        case types.productoEliminarSeleccionado:
+            return {
+                ...state,
+                productoNuevo: null
+            }
         default:
             return state;
     }

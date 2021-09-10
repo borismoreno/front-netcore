@@ -10,7 +10,7 @@ export const startAgregarProducto = (producto) => {
             dispatch(startOcultarCargandoAlerta());
             const { ok, msg, producto:prod } = body;
             if (ok) {
-                dispatch(cerrarModalProducto());
+                dispatch(cerrarModalProducto(true));
                 dispatch(agregarProducto(prod));
             } else {
                 dispatch(startMostrarError(msg,'error'));
@@ -37,8 +37,21 @@ export const startObtenerProductos = () => {
     }
 }
 
-const cerrarModalProducto = () => ({
-    type: types.facturaCerrarModal
+export const startLimpiarProductoSeleccionado = () => {
+    return async (dispatch) => {
+        dispatch(limpiarProductoSeleccionado());
+    }
+}
+
+export const startCerrarModalProducto = (cerrar = true) => {
+    return async (dispatch) => {
+        dispatch(cerrarModalProducto(cerrar));
+    }
+}
+
+const cerrarModalProducto = (cerrar = true) => ({
+    type: types.facturaCerrarModal,
+    payload: cerrar
 })
 
 const obtenerProductos = (productos) => ({
@@ -50,3 +63,5 @@ const agregarProducto = (producto) => ({
     type: types.productoActualizar,
     payload: producto
 })
+
+const limpiarProductoSeleccionado = () => ({ type: types.productoEliminarSeleccionado })

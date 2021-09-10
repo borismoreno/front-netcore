@@ -3,7 +3,8 @@ import { types } from '../types/types';
 const initialState = {
     clientes: [],
     identificacionBuscar: '',
-    clienteSeleccionado: null
+    clienteSeleccionado: null,
+    cerrarModalCliente: false
 }
 
 export const clientesReducer = (state = initialState, action) => {
@@ -28,11 +29,17 @@ export const clientesReducer = (state = initialState, action) => {
                 ...state,
                 clienteSeleccionado: null
             }
+        case types.clientesLimpiarCerrarModal:
+            return {
+                ...state,
+                cerrarModalCliente: false
+            }
         case types.clientesGuardarCliente:
             return {
                 ...state,
                 clientes: [...state.clientes, action.payload],
-                clienteSeleccionado: action.payload
+                clienteSeleccionado: action.payload,
+                cerrarModalCliente: true
             }
         default:
             return state;

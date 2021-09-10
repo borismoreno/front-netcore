@@ -32,7 +32,7 @@ export const facturaReducer = (state = initialState, action) =>{
         case types.facturaActualizarDetalle:
             return {
                 ...state,
-                detallesFactura: state.detallesFactura.map(detalle => (detalle._id!==action.payload._id ? detalle : action.payload))
+                detallesFactura: state.detallesFactura.map(detalle => (detalle.id!==action.payload.id ? detalle : action.payload))
             }
         case types.facturaAgregarFormaPago:
             return {
@@ -76,7 +76,7 @@ export const facturaReducer = (state = initialState, action) =>{
         case types.facturaCerrarModal:
             return {
                 ...state,
-                cerrarModal: true
+                cerrarModal: action.payload
             }
         default:
             return state;

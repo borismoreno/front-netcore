@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { startLimpiarSeleccion } from '../../actions/clientes';
-import { startObtenerDatosEmpresa, startObtenerFormasPago } from '../../actions/configuracion';
+import { startObtenerDatosEmpresa, startObtenerFormasPago, startObtenerTarifasIva, startObtenerTiposProducto } from '../../actions/configuracion';
 import { startActualizarAdicionales, startActualizarDetallesFactura, startAgregarDetalle, startEmitirFactura, startLimpiarDatosFactura } from '../../actions/factura';
 import { calcularImpuestosDetalle } from '../../helpers/calculos';
 import { NuevoAdicional } from '../modals/NuevoAdicional';
@@ -17,6 +17,7 @@ import TablaDetallesFactura from '../ui/TablaDetallesFactura';
 import Autocomplete from '../ui/Autocomplete';
 import NuevoProducto from '../modals/NuevoProducto';
 import { startObtenerProductos } from '../../actions/producto';
+import { EditarCliente } from '../modals/EditarCliente';
 
 const headersAdicional = [
     'Nombre',
@@ -34,8 +35,10 @@ export const FacturaScreen = ({history}) => {
     const [credito, setCredito] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [productoSeleccionado, setProductoSeleccionado] = useState('');
+    const [identificacionBusqueda, setIdentificacionBusqueda] = useState('');
+    const [mostrarAgregar, setMostrarAgregar] = useState(false);
     const [fechaEmision, setFechaEmision] = useState(new Date());
-    const { clienteSeleccionado } = useSelector(state => state.clientes);
+    const { clienteSeleccionado, cerrarModalCliente } = useSelector(state => state.clientes);
     const { empresaId } = useSelector(state => state.auth);
     const { empresa, formasPago } = useSelector(state => state.configuracion);
     const { detallesFactura, adicionalesFactura, valoresFactura, claveAcceso, cerrarModal } = useSelector(state => state.factura);
@@ -55,12 +58,14 @@ export const FacturaScreen = ({history}) => {
     useEffect(() => {
         dispatch(startObtenerFormasPago());
         dispatch(startObtenerProductos());
+        dispatch(startObtenerTiposProducto());
+        dispatch(startObtenerTarifasIva());
     }, [dispatch])
 
     useEffect(() => {
         const nuevoProd = () => {
             if (productoNuevo !== null) {
-                dispatch(startAgregarDetalle({...productos.find(producto => producto._id === productoNuevo._id), cantidad:1}))
+                dispatch(startAgregarDetalle({...productos.find(producto => producto.id === productoNuevo.id), cantidad:1}))
             }
         }
         nuevoProd();
@@ -70,9 +75,18 @@ export const FacturaScreen = ({history}) => {
         const limpiarAutocomplete = () => {
             if (cerrarModal)
                 setProductoSeleccionado('');
+                setSelectedOption('');
         }
         limpiarAutocomplete();
     }, [cerrarModal])
+
+    useEffect(() => {
+        const cerrarVentanaCliente = () => {
+            if (cerrarModalCliente)
+                setMostrarAgregar(false);
+        }
+        cerrarVentanaCliente();
+    }, [cerrarModalCliente])
 
     const handleCheckChange = () => {
         setFormaPago('');
@@ -83,7 +97,7 @@ export const FacturaScreen = ({history}) => {
 
     const handleEliminarDetalle = (index) => {
         dispatch(startActualizarDetallesFactura(detallesFactura.filter((detalle, i) => {
-            return detalle._id !== index
+            return detalle.id !== index
         })));
     }
 
@@ -201,7 +215,7 @@ export const FacturaScreen = ({history}) => {
         const seleccionar = () => {
             if (productoSeleccionado !== '' && productoSeleccionado !== 'nuevo') {
                 setSelectedOption('');
-                const buscar = detallesFactura.find(det => det._id === productoSeleccionado);
+                const buscar = detallesFactura.find(det => det.id === productoSeleccionado);
 
                 if (buscar !== undefined) {
                     dispatch(startMostrarError('Ya existe ese producto.'));
@@ -209,12 +223,12 @@ export const FacturaScreen = ({history}) => {
                     return;
                 }
 
-                dispatch(startAgregarDetalle({...productos.find(producto => producto._id === productoSeleccionado), cantidad:1}))
+                dispatch(startAgregarDetalle({...productos.find(producto => producto.id === productoSeleccionado), cantidad:1}))
                 setProductoSeleccionado('');
             }
         }
         seleccionar();
-    }, [productoSeleccionado, dispatch, productos, detallesFactura])
+    }, [productoSeleccionado, dispatch, productos, detallesFactura]);
     return (
         <div
             className="container mx-auto mb-6 mt-10 bg-white rounded-md shadow-lg px-4 pb-4"
@@ -408,7 +422,10 @@ export const FacturaScreen = ({history}) => {
                 claveAcceso && <ImprimirComprobante claveAcceso={claveAcceso} history={history} tipoComprobante='factura'/>
             }
             {
-                mostrarClienteNuevo && <TablaClientes presentarTabla={setMostrarClienteNuevo}/>
+                mostrarClienteNuevo && <TablaClientes presentarTabla={setMostrarClienteNuevo} setIdentificacionBusqueda={setIdentificacionBusqueda} setMostrarAgregar={setMostrarAgregar}/>
+            }
+            {
+                mostrarAgregar && <EditarCliente setShowModal={setMostrarAgregar} identificacionIngresada={identificacionBusqueda} />
             }
         </div>
     )

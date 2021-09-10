@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { startCerrarModalProducto } from '../../actions/producto';
 
 const Autocomplete = ({options, value, onChange, productoSeleccionado}) => {
+    const dispatch = useDispatch();
     const [showOptions, setShowOptions] = useState(false)
     const [cursor, setCursor] = useState(-1)
     const ref = useRef();
@@ -8,12 +11,13 @@ const Autocomplete = ({options, value, onChange, productoSeleccionado}) => {
     const select = option => {
         onChange(option.descripcion);
         setShowOptions(false);
-        productoSeleccionado(option._id);
+        productoSeleccionado(option.id);
     }
 
     const nuevo = () => {
         setShowOptions(false);
         // onChange('');
+        dispatch(startCerrarModalProducto(false));
         productoSeleccionado('nuevo');
     }
 
@@ -56,6 +60,7 @@ const Autocomplete = ({options, value, onChange, productoSeleccionado}) => {
                 } else {
                     if (value.length > 0) {
                         productoSeleccionado('nuevo');
+                        dispatch(startCerrarModalProducto(false));
                     }
                     setShowOptions(false);
                     // onChange('');
@@ -115,7 +120,7 @@ const Autocomplete = ({options, value, onChange, productoSeleccionado}) => {
                 }
 
                 return <li className={className} 
-                    key={option._id}
+                    key={option.id}
                     onClick={() => select(option)}
                     >{option.descripcion}</li>
             }) : <li className="px-4 py-2 text-gray-500 bg-blue-100" onClick={nuevo}>Nuevo Producto - <strong className='text-gray-900'>{value}</strong> </li>}

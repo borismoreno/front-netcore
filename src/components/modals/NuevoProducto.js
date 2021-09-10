@@ -40,29 +40,6 @@ const NuevoProducto = ({setShowModal, descripcionInicial}) => {
           tipoProducto: datos.tipoProducto,
           tarifaIva: datos.tarifaIva
         }))
-          // dispatch(startGuardarCliente(datos));
-          // let valorDescuento = 0;
-          // setShowModal(false);
-          // datos.valorUnitario = Number(datos.valorUnitario.toFixed(2));
-          // if ( datos.descuento ) {
-          //     valorDescuento = calcularDescuento(datos.valorUnitario, datos.descuento);
-          // }
-          // const subtotal = calcularSubtotal(datos.cantidad, datos.valorUnitario - valorDescuento);
-          // const tarifaImp = tarifasIva.find(tarifa => tarifa.codigo === datos.tarifaIva).porcentaje.split('%');
-          // let tarifaIvaCalculo = '0';
-          // let valorImpuesto = 0.00;
-          // if ( tarifaImp.length > 1 ) {
-          //   tarifaIvaCalculo = tarifaImp[0];
-          // }
-          // if ( Number(tarifaIvaCalculo) > 0 ) {
-          //   valorImpuesto = Number(((subtotal * Number(tarifaIvaCalculo)) / 100).toFixed(2));
-          // }
-          // dispatch(startAgregarDetalle({
-          //     ...datos,
-          //     valorDescuento,
-          //     subtotal,
-          //     valorImpuesto
-          // }));
       }
     });
     useEffect(() => {
@@ -182,9 +159,9 @@ const NuevoProducto = ({setShowModal, descripcionInicial}) => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                       >
-                          <option value=''>--SELECCIONE--</option>
+                          <option value='' key=''>--SELECCIONE--</option>
                           { tiposProducto && tiposProducto.map(item => (
-                              <option key={item._id} value={item._id}>{item.descripcion}</option>
+                              <option key={item.id} value={item.id}>{item.descripcion}</option>
                           )) }
                       </select>
                   </div>
@@ -204,7 +181,7 @@ const NuevoProducto = ({setShowModal, descripcionInicial}) => {
                       >
                           <option value=''>--SELECCIONE--</option>
                           { tarifasIva && tarifasIva.map(item => (
-                              <option key={item._id} value={item._id}>{item.porcentaje}</option>
+                              <option key={item.id} value={item.id}>{item.porcentaje}</option>
                           )) }
                       </select>
                   </div>

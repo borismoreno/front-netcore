@@ -11,7 +11,6 @@ const NotaCreditoDetalleScreen = () => {
     const params = useParams();
     const { id } = params;
     const elemento = notasCreditoEmitidas.find(item => item._id === id);
-    console.log(elemento);
     const estadoCmp = obtenerValorEstado(elemento.estadoComprobante);
     return (
         <>

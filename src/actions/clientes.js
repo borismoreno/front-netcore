@@ -1,9 +1,10 @@
 import { fetchConToken } from '../helpers/fetch';
 import { types } from '../types/types';
+import { startOcultarCargandoAlerta } from './alerta';
 
 export const startObtenerClientes = () => {
     return async(dispatch) => {
-        const respuesta = await fetchConToken('clientes/V2');
+        const respuesta = await fetchConToken('clientes');
         const body = await respuesta.json();
         if (body.ok) {
             dispatch(obtenerClientes(body.clientes));
@@ -48,15 +49,32 @@ const limpiarSeleccion = () => ({ type: types.clientesLimpiarSeleccion })
 
 export const startGuardarCliente = (cliente) => {
     return async(dispatch) => {
-        const respuesta = await fetchConToken('clientes/guardar-cliente', cliente, 'POST');
-        const body = await respuesta.json();
-        if ( body.ok ) {
-            dispatch(guardarCliente(body.cliente));
+        try {
+            const respuesta = await fetchConToken('clientes', cliente, 'POST');
+            const body = await respuesta.json();
+            dispatch(startOcultarCargandoAlerta());
+            if ( body.ok ) {
+                dispatch(guardarCliente(body.cliente));
         }
+        } catch (error) {
+            console.log(error);
+            dispatch(startOcultarCargandoAlerta());
+        }
+        
+    }
+}
+
+export const startLimpiarCerrarModal = () => {
+    return async(dispatch) => {
+        dispatch(limpiarCerrarModal());
     }
 }
 
 const guardarCliente = (cliente) => ({
     type: types.clientesGuardarCliente,
     payload: cliente
+})
+
+const limpiarCerrarModal = () => ({
+    type: types.clientesLimpiarCerrarModal
 })

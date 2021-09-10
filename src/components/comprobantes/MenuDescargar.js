@@ -12,7 +12,6 @@ export const MenuDescargar = ({claveAcceso, tieneXml = false}) => {
         }, 200);
     }
     const handleDescargarPdf = () => {
-        // console.log(claveAcceso);
         if (claveAcceso) {
             dispatch(startObtenerPdfNotaCredito(claveAcceso));
         }

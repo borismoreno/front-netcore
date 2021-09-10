@@ -4,18 +4,19 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { startBuscarTipoIdentificacion } from '../../actions/configuracion';
 import { validarCedula, validarEmail, validarExistencia, validarRuc } from '../../helpers/validaciones';
-import { startGuardarCliente } from '../../actions/clientes';
+import { startGuardarCliente, startLimpiarCerrarModal } from '../../actions/clientes';
+import { startMostrarCargandoAlerta } from '../../actions/alerta';
 
-export const EditarCliente = ({setShowModal, setShowClientes, identificacionIngresada = ''}) => {
+export const EditarCliente = ({setShowModal, identificacionIngresada = ''}) => {
     const dispatch = useDispatch();
     const { tiposIdentificacion } = useSelector(state => state.configuracion);
     const { clientes } = useSelector(state => state.clientes);
     useEffect(() => {
         dispatch(startBuscarTipoIdentificacion());
+        dispatch(startLimpiarCerrarModal());
     }, [dispatch]);
     const handleCerrar = () => {
         setShowModal(false);
-        setShowClientes(true);
     }
     const formik = useFormik({
         initialValues: {
@@ -79,17 +80,20 @@ export const EditarCliente = ({setShowModal, setShowClientes, identificacionIngr
         onSubmit: datos => {
           tiposIdentificacion.forEach(tipo => {
             if (tipo.codigo === datos.tipoIdentificacion) {
-              datos.tipoIdentificacion = tipo._id
+              datos.tipoIdentificacion = tipo.id
             }
           });
           datos.razonSocial = datos.razonSocial.toUpperCase();
           datos.direccion = datos.direccion.toUpperCase();
+          dispatch(startMostrarCargandoAlerta());
             dispatch(startGuardarCliente(datos));
-            setShowModal(false);
         }
     })
     return (
         <>
+        <div 
+          className='justify-center flex overflow-x-hidden overflow-y-auto fixed inset-0  z-50 outline-none focus:outline-none'
+        >
             <div className="relative w-10/12 md:w-8/12 lg:w-5/12 my-6 pb-2 mx-auto max-w-3xl">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -151,7 +155,7 @@ export const EditarCliente = ({setShowModal, setShowClientes, identificacionIngr
                       >
                           <option value=''>--SELECCIONE--</option>
                           { tiposIdentificacion && tiposIdentificacion.map(item => (
-                              <option key={item._id} value={item.codigo}>{item.tipoIdentificacion}</option>
+                              <option key={item.id} value={item.codigo}>{item.descripcion}</option>
                           )) }
                       </select>
                       { 
@@ -289,6 +293,8 @@ export const EditarCliente = ({setShowModal, setShowClientes, identificacionIngr
                 </div>
               </div>
             </div>
+            </div>
+            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
     )
 }

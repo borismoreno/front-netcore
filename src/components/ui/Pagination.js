@@ -12,6 +12,8 @@ export const Pagination = ({rowsPerPage, totalRows, currentPage, setCurrentPage,
     } else if (currentPage === pageNumbers.length) {
         canNextPage = false;
     }
+    if (pageNumbers.length === 1)
+        canNextPage = false;
     return (
         <div className="flex flex-row">
             <span className="text-sm mr-4 mt-2 hidden xl:block">
