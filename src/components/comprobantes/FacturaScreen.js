@@ -151,20 +151,19 @@ export const FacturaScreen = ({history}) => {
             return;
         }
         setRemarcar(false);
-        let formasDePago = [{
+        let formaDePago = {
             tipoFormaPago: formaPago,
             valorPago: valorTotal.toFixed(2),
-            plazo: '0',
+            plazo: plazoCredito,
             tipoPlazo: 'DIAS',
-        }]
+        }
         dispatch(startMostrarCargandoAlerta());
-        dispatch(startEmitirFactura({
-            cliente: clienteSeleccionado,
+        const envio = {
+            idCliente: clienteSeleccionado.id,
             fechaEmision: fechaEnvio,
-            empresa,
             impuestosDetalle,
             detalles: detallesFactura,
-            formasPago: formasDePago,
+            formaDePago: formaDePago,
             datosAdicionales: adicionalesFactura,
             autorizar: true,
             detalleValores: {
@@ -173,7 +172,24 @@ export const FacturaScreen = ({history}) => {
                 totalIva,
                 importeTotal: valorTotal.toFixed(2)
             }
-        }));
+        }
+        dispatch(startEmitirFactura(envio));
+        // dispatch(startEmitirFactura({
+        //     cliente: clienteSeleccionado,
+        //     fechaEmision: fechaEnvio,
+        //     empresa,
+        //     impuestosDetalle,
+        //     detalles: detallesFactura,
+        //     formasPago: formasDePago,
+        //     datosAdicionales: adicionalesFactura,
+        //     autorizar: true,
+        //     detalleValores: {
+        //         totalSinImpuestos: subtotalSinImpuestos.toFixed(2),
+        //         totalDescuento: '0.00',
+        //         totalIva,
+        //         importeTotal: valorTotal.toFixed(2)
+        //     }
+        // }));
     }
 
     useEffect(() => {

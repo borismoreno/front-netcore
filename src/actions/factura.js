@@ -116,6 +116,7 @@ export const startEmitirFactura = (envioFactura) => {
     return async (dispatch) => {
         try {
             const { empresa } = envioFactura;
+            console.log('datos',envioFactura);
             const respuesta = await fetchConToken('factura', envioFactura, 'POST');
             const body = await respuesta.json();
             if (body.ok) {
