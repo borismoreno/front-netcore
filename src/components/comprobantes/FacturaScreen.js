@@ -163,7 +163,7 @@ export const FacturaScreen = ({history}) => {
             fechaEmision: fechaEnvio,
             impuestosDetalle,
             detalles: detallesFactura,
-            formaDePago: formaDePago,
+            formaPago: formaDePago,
             datosAdicionales: adicionalesFactura,
             autorizar: true,
             detalleValores: {
